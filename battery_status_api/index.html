@@ -1,0 +1,60 @@
+<!DOCTYPE html> 
+<html lang="ja"> 
+<head> 
+<meta charset="UTF-8" />
+<title>Battery Status API TEST</title> 
+<script> 
+function init()
+{
+	//user agentの描画
+	document.getElementById('useragent').innerHTML = 'You are using<br />'+ window.navigator.userAgent;
+
+	//battery status apiのテスト
+	var mainElem = document.getElementById('main');
+	var battery = (window.navigator.battery || window.navigator.mozBattery || window.navigator.webkitBattery);
+	console.log(battery);
+	if( typeof battery != 'undefined' )
+	{
+		//バッテリーが現在充電中であるかどうかを示すブール値
+		var charging = document.createElement('p');
+		charging.setAttribute('id', 'charging');
+		charging.innerHTML =	"バッテリーが現在充電中であるかどうかを示すブール値<br />"
+								+"charging:" + battery.charging;
+
+		//この数値はバッテリーが充電されるまで秒数で残り時間を表す、またはバッテリーが完全に充電されている場合0になるまでの残り時間を表す。
+		var chargingTime = document.createElement('p');
+		chargingTime.setAttribute('id', 'charging');
+		chargingTime.innerHTML =	"この数値はバッテリーが充電されるまで秒数で残り時間を表す、またはバッテリーが完全に充電されている場合0になるまでの残り時間を表す<br />"
+								+"chargingTime:" + battery.chargingTime;
+
+		//この数値はバッテリーが完全に放電され、システムが中断されるまで、秒単位で残り時間で表す。
+		var dischargingTime  = document.createElement('p');
+		dischargingTime .setAttribute('id', 'dischargingTime ');
+		dischargingTime .innerHTML =	"この数値はバッテリーが完全に放電され、システムが中断されるまで、秒単位で残り時間で表す<br />"
+								+"dischargingTime :" + battery.dischargingTime 
+
+		//この数値は0.0から1.0の間にスケーリングされ、システムのバッテリー充電率を表す。
+		var level = document.createElement('p');
+		level.setAttribute('id', 'level');
+		level.innerHTML =	"この数値は0.0から1.0の間にスケーリングされ、システムのバッテリー充電率を表す<br />"
+								+"level:" + battery.level
+
+		//main divにappend
+		mainElem.appendChild(charging);
+		mainElem.appendChild(chargingTime);
+		mainElem.appendChild(dischargingTime);
+		mainElem.appendChild(level);
+	}
+	else
+	{
+		mainElem.innerHTML = 'not supported Battery Status API';
+	}
+	
+}
+</script> 
+</head> 
+<body onload="init()">
+	<p id="useragent"></p>
+	<div id="main"></div>
+</body> 
+</html>
