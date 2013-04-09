@@ -1,0 +1,25 @@
+<!DOCTYPE html><html><head>	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">	<meta http-equiv="Cache-Control" content="no-cache" />	<meta http-equiv="Content-Script-Type" content= "text/javascript" />	<meta http-equiv="Content-Style-Type" content="text/css" />    <title>Photo Upload test</title></head><body>	<input id="file_upload" type="file" name="photo" accept="image/*; capture=camera">
+	<div id="hoge"></div></body>
+<script type='text/javascript'>
+function changeUploadingFile( e )
+{
+	var files = e.target.files;
+		
+	for( var i = 0; i < files.length; i++ )
+	{
+		//FileReaderの設定
+		var fr = new FileReader();
+		fr.onload =	(	function( f )
+						{
+							document.getElementById('hoge').innerHTML = '<img src="'+ fr.result +'" width="320px" />';
+						}
+					);
+		
+		//ファイルの読み込み
+		fr.readAsDataURL( files[i] );
+	}
+}
+
+document.getElementById('file_upload').addEventListener('change', changeUploadingFile, false);
+</script></html>
