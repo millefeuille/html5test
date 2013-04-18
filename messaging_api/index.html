@@ -1,24 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-	<meta http-equiv="Cache-Control" content="no-cache" />
-	<meta http-equiv="Content-Script-Type" content= "text/javascript" />
-	<meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <script type="text/javascript" src="misc.js"></script>
     <title>Messaging API test</title>
 </head>
 <body style="padding:0px; margin:0px;">
     <section id="title">親フレーム</section>
     <div>
-        <input type="button" onclick="sendMessage()" value="送信" />
+        <input type="button" onclick="sendMessage()" value="子フレームへ送信" />
     </div>
     <p id="message"></p>
-	<iframe id="child_frame" src="iframe.html" style="width:100%; margin:0px; padding:0px;"></iframe>
+    <iframe id="child_frame" src="iframe.html" style="width:100%; margin:0px; padding:0px;"></iframe>
 </body>
 <script type='text/javascript'>
     //送信内容のメッセージ
-    var message = "親フレームへのメッセージ";
+    var message = "親フレームからのメッセージ";
 
     //このページのオリジンを取得
     var origin  = getOrigin();
@@ -39,49 +40,7 @@
     window.onmessage = function( e )
     {
         document.getElementById("message").innerHTML = "Message Received: "+ e.data +"<br />from: "+ e.origin;
-    }
-    
-
-
-    /***************
-     *
-     * 以下，本APIの範疇ではない汎用的な関数
-     *
-     ***************/
-    function getOrigin()
-    {
-        return getProtocol() +"://"+ getIP() +":"+ getPortNo();
-    }
-
-    function getPortNo()
-    {
-        var splitStr = location.href.split(":");
-        if( splitStr.length == 3 )
-        {
-            //明記されているポート番号を返す
-            return (splitStr[2].split("/")).shift();
-        }
-
-        //明記されていないので80ポートをとりあえず返す
-        return 80;
-    }
-
-    function getIP()
-    {
-        var splitStr = location.href.split(":");
-        if( splitStr.length < 3  )
-        {
-            //ポート番号が明記されていなので"/"の間に挟まれているものを返す
-            return location.href.split("/")[2];
-        }
-        
-        //ポート番号が明記されているので"/"の間に挟まれているものからポート番号を覗いたものを返す
-        return (location.href.split("/")[2]).split(":")[0];
-    }
-        
-    function getProtocol()
-    {
-        return location.href.split(":")[0];
+        console.log(e);
     }
 </script>
 </html>
