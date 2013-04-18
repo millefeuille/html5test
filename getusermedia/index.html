@@ -1,46 +1,62 @@
-<!DOCTYPE html><html><head>	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">	<meta http-equiv="Cache-Control" content="no-cache" />	<meta http-equiv="Content-Script-Type" content= "text/javascript" />	<meta http-equiv="Content-Style-Type" content="text/css" />    <title>GetUserMedia API test</title></head><body style="padding:0px; margin:0px;">
-	<p id="message"></p>
-	<video id="myVideo" src=""></video>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Content-Script-Type" content= "text/javascript" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <title>GetUserMedia API test</title>
+</head>
+<body style="padding:0px; margin:0px;">
+    <p id="message"></p>
+    <video id="myVideo" src=""></video>
 </body>
 <script type='text/javascript'>
-var messageElem = document.getElementById("message");
-var localMediaStream = null;
+    var messageElem = document.getElementById("message");
+    var localMediaStream = null;
 
-if( navigator.getUserMedia )
-{
-	messageElem.innerHTML = 'OK: without vendor prifix';
-}
-else if( navigator.webkitGetUserMedia )
-{
-	messageElem.innerHTML = 'OK: webkit';
-}
-else if( navigator.mozGetUserMedia )
-{
-	messageElem.innerHTML = 'OK: mozilla';
-}
-else
-{
-	messageElem.innerHTML = 'NG: not support getUserMedia API';
-}
+    //各ブラウザに合わせて対応可否のメッセージを表示
+    if( navigator.getUserMedia )
+    {
+        messageElem.innerHTML = 'OK: without vendor prifix';
+    }
+    else if( navigator.webkitGetUserMedia )
+    {
+        messageElem.innerHTML = 'OK: webkit';
+    }
+    else if( navigator.mozGetUserMedia )
+    {
+        messageElem.innerHTML = 'OK: mozilla';
+    }
+    else
+    {
+        messageElem.innerHTML = 'NG: not support getUserMedia API';
+    }
 
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    //vendor prefixを吸収
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-console.log( navigator.getUserMedia );
-
-navigator.getUserMedia(	{video: true},
-						function(localMediaStream)
-						{
-							// 成功時の処理
-							var myVideo = document.getElementById('myVideo');
-							myVideo.src= window.URL.createObjectURL(localMediaStream);
-							myVideo.play();
-						},
-						function(err)
-						{
-							// 失敗時の処理
-							document.getElementById("message").innerHTML = 'Error: cannot get camera stream.';
-							console.log(err);
-						}
-					);
-</script></html>
+    //カメラ画像を取得して表示
+    //第一引数：メディアの種類(video, audio)
+    //第二引数：成功時の処理
+    //第三引数：失敗時の処理
+    navigator.getUserMedia
+    (
+        {video:true, audio:true},
+        function(localMediaStream)
+        {
+            //カメラからキャプチャした画像などを表示
+            var myVideo = document.getElementById('myVideo');
+            myVideo.src= window.URL.createObjectURL(localMediaStream);
+            myVideo.play();
+        },
+        function(err)
+        {
+            //失敗のエラーメッセージを表示
+            document.getElementById("message").innerHTML = 'Error: cannot get camera stream.';
+            console.log(err);
+        }
+    );
+</script>
+</html>
