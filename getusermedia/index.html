@@ -9,12 +9,16 @@
     <title>GetUserMedia API test</title>
 </head>
 <body style="padding:0px; margin:0px;">
+    <p id="useragent"></p>
     <p id="message"></p>
-    <video id="myVideo" src=""></video>
+    <video id="myVideo" width="100%" autoplay></video>
 </body>
 <script type='text/javascript'>
     var messageElem = document.getElementById("message");
     var localMediaStream = null;
+    
+    //user agentの描画
+    document.getElementById('useragent').innerHTML = 'You are using<br />'+ window.navigator.userAgent;
 
     //各ブラウザに合わせて対応可否のメッセージを表示
     if( navigator.getUserMedia )
@@ -49,7 +53,8 @@
             //カメラからキャプチャした画像などを表示
             var myVideo = document.getElementById('myVideo');
             myVideo.src= window.URL.createObjectURL(localMediaStream);
-            myVideo.play();
+            //myVideo.src= webkitURL.createObjectURL(localMediaStream);
+            //myVideo.play();
         },
         function(err)
         {
